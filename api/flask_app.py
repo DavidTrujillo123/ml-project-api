@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify
 import joblib
 import numpy as np
-from tensorflow.keras.models import load_model
+import tensorflow as tf
+from tensorflow import keras
+from keras.models import load_model
 
 app = Flask(__name__)
 
