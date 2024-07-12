@@ -36,5 +36,5 @@ def predict():
         'model_relu_prediction': model_relu_prediction.tolist()
     })
 
-if __name__ == '__main__':
-    app.run(debug=False)
+# if __name__ == '__main__':
+#     app.run(debug=False)
