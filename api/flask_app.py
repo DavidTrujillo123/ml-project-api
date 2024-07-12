@@ -12,6 +12,10 @@ log_reg = joblib.load('api/models/logistic_regression_model.pkl')
 model_sigmoid = load_model('api/models/model_sigmoid.h5')
 model_relu = load_model('api/models/model_relu.h5')
 
+@app.route('/', methods=['GET'])
+def index():
+    return 'API de predicción de Diabetes'
+
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.get_json(force=True)
