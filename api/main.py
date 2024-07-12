@@ -1,9 +1,7 @@
 from flask import Flask, request, jsonify
 import joblib
 import numpy as np
-import tensorflow as tf
-from tensorflow import keras
-from keras.models import load_model
+from tensorflow.keras.models import load_model
 
 app = Flask(__name__)
 
@@ -39,4 +37,4 @@ def predict():
     })
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
