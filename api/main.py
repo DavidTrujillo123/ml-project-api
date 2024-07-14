@@ -1,9 +1,12 @@
 from flask import Flask, request, jsonify
 import joblib
 import numpy as np
+from flask_cors import CORS
 from tensorflow.keras.models import load_model
 
 app = Flask(__name__)
+
+CORS(app)
 
 # Cargar el modelo de regresión logística
 log_reg = joblib.load('api/models/logistic_regression_model.pkl')
@@ -31,9 +34,9 @@ def predict():
     model_relu_prediction = model_relu.predict(input_data)
 
     return jsonify({
-        'log_reg_prediction': log_reg_prediction.tolist(),
-        'model_sigmoid_prediction': model_sigmoid_prediction.tolist(),
-        'model_relu_prediction': model_relu_prediction.tolist()
+        'log_reg_prediction': log_reg_prediction.tolist()[0],
+        'model_sigmoid_prediction': model_sigmoid_prediction.tolist()[0][0],
+        'model_relu_prediction': model_relu_prediction.tolist()[0][0]
     })
 
 if __name__ == '__main__':
