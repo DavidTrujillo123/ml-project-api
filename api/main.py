@@ -24,30 +24,33 @@ def index():
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    data = request.form.to_dict()
-    data = {key: float(value) for key, value in data.items()}
+    try:
+        data = request.get_json(force=True)['input']
+        data = {key: float(value) for key, value in data.items()}
 
-    columns = ['gender', 'age', 'hypertension', 'heart_disease', 'smoking_history', 'bmi', 'HbA1c_level', 'blood_glucose_level']
-    new_data = pd.DataFrame([data], columns=columns)
+        columns = ['gender', 'age', 'hypertension', 'heart_disease', 'smoking_history', 'bmi', 'HbA1c_level', 'blood_glucose_level']
+        new_data = pd.DataFrame([data], columns=columns)
 
-    # Estandarizar los nuevos datos utilizando el scaler ajustado
-    new_data_scaled = scaler.transform(new_data)
+        # Estandarizar los nuevos datos utilizando el scaler ajustado
+        new_data_scaled = scaler.transform(new_data)
 
-    # Predicción con el modelo de regresión logística
-    log_reg_prediction = log_reg.predict(new_data_scaled)
+        # Predicción con el modelo de regresión logística
+        log_reg_prediction = log_reg.predict(new_data_scaled)
 
-    # Predicción con el modelo de red neuronal (sigmoide)
-    model_sigmoid_prediction = model_sigmoid.predict(new_data_scaled)
+        # Predicción con el modelo de red neuronal (sigmoide)
+        model_sigmoid_prediction = model_sigmoid.predict(new_data_scaled)
 
-    # Predicción con el modelo de red neuronal (relu)
-    # model_relu_prediction = model_relu.predict(new_data_scaled)
+        # Predicción con el modelo de red neuronal (relu)
+        # model_relu_prediction = model_relu.predict(new_data_scaled)
 
-    return jsonify({
-        'log_reg_prediction': log_reg_prediction.tolist()[0],
-        'model_sigmoid_prediction': model_sigmoid_prediction.tolist()[0][0],
-        # 'model_relu_prediction': model_relu_prediction.tolist()[0][0],
-        'coeficientes_regresion_log': log_reg.coef_.tolist()[0]
-    })
+        return jsonify({
+            'log_reg_prediction': int(log_reg_prediction[0]),
+            'model_sigmoid_prediction': model_sigmoid_prediction.tolist()[0][0],
+            # 'model_relu_prediction': model_relu_prediction.tolist()[0][0],
+            'coeficientes_regresion_log': log_reg.coef_.tolist()[0]
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
